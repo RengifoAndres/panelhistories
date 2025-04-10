@@ -63,10 +63,13 @@ program define panelstories
     bysort story_id: gen col = _n
     gen observed = real(substr(story, col, 1))
     label var observed "Observed"
-
+	gen observed1= col if observed==1
+	gen  observed0= col if observed==0
+	
+	gen base =0
     * Step 8: Create the graph
-    twoway (scatter row col if observed == 1, mcolor(black) msymbol(square) msize(large)) ///
-           (scatter row col if observed == 0, mcolor(white) msymbol(square) msize(large) mfcolor(none)), ///
+    twoway (rbar base observed1 row  if observed == 1, horizontal) ///
+           (rbar base  observed0 row if observed == 0, horizontal), ///
            ytitle("Observation Patterns") xtitle("Time Periods") ///
            ylabel(`=-1'(`=-1')`=-`rows'', valuelabel labsize(small)) ///
            xlabel(1(1)`T') legend(off) 
